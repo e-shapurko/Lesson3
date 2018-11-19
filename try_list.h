@@ -50,7 +50,7 @@ public:
 //            current_node = current_node->pNext;
             return current_node->data;
         }
-
+	}
     iterator begin() {return m_head;}
     iterator end() {return m_head + m_size;}
 
