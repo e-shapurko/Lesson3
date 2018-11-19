@@ -13,6 +13,48 @@ public:
         m_size = 0;
     }
 
+//    template<typename U>
+    template<typename U>
+    class Node;
+
+    class iterator
+    {
+        Node<T>* current_node;
+    public:
+        iterator(Node<T>* first ) : current_node(first){}
+
+        operator + (int n)
+        {
+            current_node = (current_node + n)->pNext;
+            return *current_node;
+        }
+
+        operator ++ ()
+        {
+            current_node = current_node->pNext;
+            return *current_node;
+        }
+
+        bool operator != (const iterator& it)
+        {
+            return current_node != it.current_node;
+        }
+
+        bool operator == (const iterator& it)
+        {
+            return current_node == it.current_node;
+        }
+
+        T& operator* ()
+        {
+//            current_node = current_node->pNext;
+            return current_node->data;
+        }
+
+    iterator begin() {return m_head;}
+    iterator end() {return m_head + m_size;}
+
+
     T& operator[](const int index)
     {
         int counter = 0;
@@ -28,6 +70,8 @@ public:
         }
     }
 
+
+
     void push_back(T data)
     {
         if (m_head == nullptr)
@@ -42,8 +86,8 @@ public:
             {
                 current = current->pNext;
             }
-            current->pNext = m_allocator.allocate(1);
-
+            (current->pNext) = m_allocator.allocate(1);
+            current->pNext->data = data;
         }
         m_size++;
     }
@@ -64,10 +108,11 @@ private:
             this->pNext = pNext;
         }
     };
-    int m_size;
+    std::size_t m_size;
     Node<T> *m_head;
-    using node_alloc = typename alloc::template rebind<T>::other;
+    using node_alloc = typename alloc::template rebind<Node<T>>::other;
     node_alloc m_allocator;
+
 
 
 
